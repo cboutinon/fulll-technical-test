@@ -2,9 +2,8 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "behat/behat": "*"
-    },
-    "require-dev": {
+        "behat/behat": "*",
+        "ramsey/uuid": "^4.7"
     },
     "config": {
         "preferred-install": {
@@ -17,7 +16,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Fulll\\": "src/"
+            "Fulll\\": "src/",
+            "features\\bootstrap\\": "tests/behat/features/bootstrap/"
         }
     }
 }
