@@ -1,0 +1,8 @@
+default:
+  suites:
+    default:
+      paths:
+        - tests/behat/features
+      contexts:
+        - features\bootstrap\FeatureContext
+        - features\bootstrap\FleetContext
