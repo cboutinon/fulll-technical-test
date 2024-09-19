@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+namespace features\bootstrap;
+
 use Behat\Behat\Context\Context;
 use Fulll\App\Calculator;
 
-class FeatureContext implements Context
+final class FeatureContext implements Context
 {
     /**
      * @When I multiply :a by :b into :var
