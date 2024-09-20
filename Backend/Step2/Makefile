@@ -16,3 +16,6 @@ phpcs-check:
 
 phpstan:
 	$(PHPSTAN) --level=9 analyse src
+
+behat:
+	vendor/behat/behat/bin/behat
