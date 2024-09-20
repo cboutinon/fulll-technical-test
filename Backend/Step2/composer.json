@@ -7,14 +7,14 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "behat/behat": "*",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.2.*",
         "symfony/runtime": "7.2.*",
+        "symfony/uid": "7.2.*",
         "symfony/yaml": "7.2.*"
-    },
-    "require-dev": {
     },
     "config": {
         "allow-plugins": {
@@ -31,7 +31,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "App\\Tests\\": "tests/",
+            "features\\bootstrap\\": "tests/behat/features/bootstrap/"
         }
     },
     "replace": {
@@ -64,5 +65,8 @@
             "allow-contrib": false,
             "require": "7.2.*"
         }
+    },
+    "require-dev": {
+        "friends-of-behat/symfony-extension": "^2.0"
     }
 }
