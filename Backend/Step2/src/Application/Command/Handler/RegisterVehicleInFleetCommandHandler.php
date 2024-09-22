@@ -9,7 +9,9 @@ use App\Domain\Entity\Vehicle;
 use App\Domain\Exception\FleetNotFoundException;
 use App\Domain\Exception\VehicleAlreadyExistsException;
 use App\Domain\Repository\FleetRepositoryInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 final readonly class RegisterVehicleInFleetCommandHandler
 {
     public function __construct(
@@ -17,7 +19,7 @@ final readonly class RegisterVehicleInFleetCommandHandler
     ) {
     }
 
-    public function handle(RegisterVehicleInFleetCommand $registerVehicleCommand): void
+    public function __invoke(RegisterVehicleInFleetCommand $registerVehicleCommand): void
     {
         $fleet = $this->fleetRepository->findById($registerVehicleCommand->fleetId);
         if ($fleet === null) {
@@ -32,6 +34,7 @@ final readonly class RegisterVehicleInFleetCommandHandler
             $registerVehicleCommand->plateNumber,
             $registerVehicleCommand->vehicleType,
         );
+        $vehicle->setFleet($fleet);
 
         $fleet->addVehicle($vehicle);
         $this->fleetRepository->save($fleet);

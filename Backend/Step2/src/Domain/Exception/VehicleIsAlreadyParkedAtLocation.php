@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Domain\Exception;
 
 use App\Domain\ValueObject\Location;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
 
-final class VehicleIsAlreadyParkedAtLocation extends \RuntimeException
+final class VehicleIsAlreadyParkedAtLocation extends \RuntimeException implements ExceptionInterface
 {
     public function __construct(Location $location, int $code = 0, \Throwable $previous = null)
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Behat\features\bootstrap;
 
 use App\Domain\Repository\FleetRepositoryInterface;
+use App\Domain\ValueObject\UserId;
 use Behat\Behat\Context\Context;
 use App\Application\Command\CreateFleetByUserCommand;
 use App\Application\Command\Handler\CreateFleetByUserCommandHandler;
@@ -20,7 +21,6 @@ use App\Domain\Exception\VehicleAlreadyExistsException;
 use App\Domain\Exception\VehicleIsAlreadyParkedAtLocation;
 use App\Domain\ValueObject\FleetId;
 use App\Domain\ValueObject\Location;
-use App\Infrastructure\InMemory\InMemoryFleetRepository;
 use RuntimeException;
 
 final class FleetContext implements Context
@@ -33,7 +33,6 @@ final class FleetContext implements Context
     private VehicleIsAlreadyParkedAtLocation|null $vehicleIsAlreadyParkedAtLocation = null;
     private Location $location;
 
-
     public function __construct(
         private readonly FleetRepositoryInterface $fleetRepository,
     ) {
@@ -45,9 +44,9 @@ final class FleetContext implements Context
     public function prepareMyFleet(): void
     {
         $createFleetByUserHandler = new CreateFleetByUserCommandHandler($this->fleetRepository);
-        $this->fleetId = $createFleetByUserHandler->handle(
+        $this->fleetId = $createFleetByUserHandler->__invoke(
             new CreateFleetByUserCommand(
-                user: 'user1',
+                userId: new UserId(),
             )
         );
     }
@@ -67,7 +66,7 @@ final class FleetContext implements Context
     public function iHaveRegisteredThisVehicleIntoMyFleet(): void
     {
         $registerVehicleHandler = new RegisterVehicleInFleetCommandHandler($this->fleetRepository);
-        $registerVehicleHandler->handle(
+        $registerVehicleHandler->__invoke(
             new RegisterVehicleInFleetCommand(
                 fleetId: $this->fleetId,
                 plateNumber: $this->plateNumber,
@@ -84,7 +83,7 @@ final class FleetContext implements Context
     public function iRegisterVehicleIntoMyFleet(): void
     {
         $registerVehicleHandler = new RegisterVehicleInFleetCommandHandler($this->fleetRepository);
-        $registerVehicleHandler->handle(
+        $registerVehicleHandler->__invoke(
             new RegisterVehicleInFleetCommand(
                 fleetId: $this->fleetId,
                 plateNumber: $this->plateNumber,
@@ -119,7 +118,7 @@ final class FleetContext implements Context
         $registerVehicleHandler = new RegisterVehicleInFleetCommandHandler($this->fleetRepository);
 
         try {
-            $registerVehicleHandler->handle(
+            $registerVehicleHandler->__invoke(
                 new RegisterVehicleInFleetCommand(
                     $this->fleetId,
                     $this->plateNumber,
@@ -148,9 +147,9 @@ final class FleetContext implements Context
     public function prepareFleetOfAnotherUser(): void
     {
         $createFleetByUserHandler = new CreateFleetByUserCommandHandler($this->fleetRepository);
-        $this->fleet2Id = $createFleetByUserHandler->handle(
+        $this->fleet2Id = $createFleetByUserHandler->__invoke(
             new CreateFleetByUserCommand(
-                user: 'user2',
+                userId: new UserId(),
             )
         );
     }
@@ -161,7 +160,7 @@ final class FleetContext implements Context
     public function VehicleHasBeenRegisteredIntoOtherUserFleet(): void
     {
         $registerVehicleHandler = new RegisterVehicleInFleetCommandHandler($this->fleetRepository);
-        $registerVehicleHandler->handle(
+        $registerVehicleHandler->__invoke(
             new RegisterVehicleInFleetCommand(
                 $this->fleet2Id,
                 $this->plateNumber,
@@ -177,7 +176,8 @@ final class FleetContext implements Context
     {
         $this->location = new Location(
             48.8566,
-            2.3522
+            2.3522,
+            null,
         );
     }
 
@@ -187,7 +187,7 @@ final class FleetContext implements Context
     public function iParkVehicleAtLocation(): void
     {
         $updateVehicleLocationHandler = new UpdateVehicleLocationInFleetCommandHandler($this->fleetRepository);
-        $updateVehicleLocationHandler->handle(
+        $updateVehicleLocationHandler->__invoke(
             new UpdateVehicleLocationInFleetCommand(
                 $this->fleetId,
                 $this->plateNumber,
@@ -202,7 +202,7 @@ final class FleetContext implements Context
     public function iKnownLocationOfMyVehicle(): void
     {
         $vehicleLocationHandler = new VehicleLocationExistsByFleetQueryHandler($this->fleetRepository);
-        $vehicleLocationHandler->handle(
+        $vehicleLocationHandler->__invoke(
             new VehicleLocationExistsByFleetQuery(
                 $this->fleetId,
                 $this->location,
@@ -216,7 +216,7 @@ final class FleetContext implements Context
     public function vehicleHasBeenParkedIntoLocation(): void
     {
         $updateVehicleLocationHandler = new UpdateVehicleLocationInFleetCommandHandler($this->fleetRepository);
-        $updateVehicleLocationHandler->handle(
+        $updateVehicleLocationHandler->__invoke(
             new UpdateVehicleLocationInFleetCommand(
                 $this->fleetId,
                 $this->plateNumber,
@@ -233,7 +233,7 @@ final class FleetContext implements Context
         $updateVehicleLocationHandler = new UpdateVehicleLocationInFleetCommandHandler($this->fleetRepository);
 
         try {
-            $updateVehicleLocationHandler->handle(
+            $updateVehicleLocationHandler->__invoke(
                 new UpdateVehicleLocationInFleetCommand(
                     $this->fleetId,
                     $this->plateNumber,
