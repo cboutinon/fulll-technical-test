@@ -1,0 +1,10 @@
+framework:
+    messenger:
+        transports:
+            async: 'sync://'
+
+        routing:
+            'App\Application\Query\VehicleLocationExistsByFleetQuery': async
+            'App\Application\Command\CreateFleetByUserCommand': async
+            'App\Application\Command\RegisterVehicleInFleetCommand': async
+            'App\Application\Command\UpdateVehicleLocationInFleetCommand': async

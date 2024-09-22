@@ -8,10 +8,15 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "behat/behat": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.2",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/messenger": "7.2.*",
         "symfony/runtime": "7.2.*",
         "symfony/uid": "7.2.*",
         "symfony/yaml": "7.2.*"
@@ -67,6 +72,7 @@
         }
     },
     "require-dev": {
-        "friends-of-behat/symfony-extension": "^2.0"
+        "friends-of-behat/symfony-extension": "^2.0",
+        "symfony/maker-bundle": "^1.61"
     }
 }
