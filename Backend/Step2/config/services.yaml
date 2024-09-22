@@ -20,4 +20,4 @@ services:
             - '../src/Domain/*'
             - '../src/Kernel.php'
 
-    App\Domain\Repository\FleetRepositoryInterface: '@App\Infrastructure\InMemory\InMemoryFleetRepository'
+    App\Domain\Repository\FleetRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineFleetRepository'

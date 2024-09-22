@@ -10,11 +10,5 @@ use App\Domain\ValueObject\FleetId;
 interface FleetRepositoryInterface
 {
     public function findById(FleetId $fleetId): Fleet|null;
-
-    /**
-     * @return Fleet[]
-     */
-    public function findByUser(string $user): array;
-
     public function save(Fleet $fleet): FleetId;
 }
