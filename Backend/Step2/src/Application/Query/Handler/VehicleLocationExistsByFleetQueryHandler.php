@@ -8,7 +8,9 @@ use App\Application\Query\VehicleLocationExistsByFleetQuery;
 use App\Domain\Entity\Vehicle;
 use App\Domain\Exception\FleetNotFoundException;
 use App\Domain\Repository\FleetRepositoryInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 final readonly class VehicleLocationExistsByFleetQueryHandler
 {
     public function __construct(
@@ -16,7 +18,7 @@ final readonly class VehicleLocationExistsByFleetQueryHandler
     ) {
     }
 
-    public function handle(VehicleLocationExistsByFleetQuery $vehicleLocationExistsByFleetQuery): Vehicle|null
+    public function __invoke(VehicleLocationExistsByFleetQuery $vehicleLocationExistsByFleetQuery): Vehicle|null
     {
         $fleet = $this->fleetRepository->findById($vehicleLocationExistsByFleetQuery->fleetId);
         if ($fleet === null) {
@@ -24,7 +26,12 @@ final readonly class VehicleLocationExistsByFleetQueryHandler
         }
 
         foreach ($fleet->getVehicles() as $vehicle) {
-            if ($vehicle->getLocation() === $vehicleLocationExistsByFleetQuery->location) {
+            /** @var Vehicle $vehicle */
+            if (
+                $vehicle->getLocation()?->getLatitude() === $vehicleLocationExistsByFleetQuery->location->getLatitude() &&
+                $vehicle->getLocation()?->getLongitude() === $vehicleLocationExistsByFleetQuery->location->getLongitude() &&
+                $vehicle->getLocation()?->getAltitude() === $vehicleLocationExistsByFleetQuery->location->getAltitude()
+            ) {
                 return $vehicle;
             }
         }

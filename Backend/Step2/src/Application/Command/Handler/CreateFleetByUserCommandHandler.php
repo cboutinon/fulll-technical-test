@@ -8,7 +8,10 @@ use App\Application\Command\CreateFleetByUserCommand;
 use App\Domain\Entity\Fleet;
 use App\Domain\Repository\FleetRepositoryInterface;
 use App\Domain\ValueObject\FleetId;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 final readonly class CreateFleetByUserCommandHandler
 {
     public function __construct(
@@ -16,11 +19,11 @@ final readonly class CreateFleetByUserCommandHandler
     ) {
     }
 
-    public function handle(CreateFleetByUserCommand $createFleetByUserCommand): FleetId
+    public function __invoke(CreateFleetByUserCommand $createFleetByUserCommand): FleetId
     {
         $fleet = new Fleet(
-            $createFleetByUserCommand->user,
-            []
+            $createFleetByUserCommand->userId,
+            new ArrayCollection(),
         );
 
         return $this->fleetRepository->save($fleet);
