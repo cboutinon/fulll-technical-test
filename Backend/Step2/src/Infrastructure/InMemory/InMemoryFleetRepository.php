@@ -20,21 +20,6 @@ final class InMemoryFleetRepository implements FleetRepositoryInterface
         return array_key_exists($fleetId->toString(), $this->fleets) ? $this->fleets[$fleetId->toString()] : null;
     }
 
-    /**
-     * @return Fleet[]
-     */
-    public function findByUser(string $user): array
-    {
-        $fleets = [];
-        foreach ($this->fleets as $fleet) {
-            if ($fleet->getUser() === $user) {
-                $fleets[] = $fleet;
-            }
-        }
-
-        return $fleets;
-    }
-
     public function save(Fleet $fleet): FleetId
     {
         $this->fleets[$fleet->getId()->toString()] = $fleet;
