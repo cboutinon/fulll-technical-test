@@ -6,4 +6,8 @@ services:
   App\Tests\Behat\:
     resource: '../tests/Behat/*'
 
-  App\Domain\Repository\FleetRepositoryInterface: '@App\Infrastructure\InMemory\InMemoryFleetRepository'
+  App\Infrastructure\InMemory\InMemoryFleetRepository: ~
+
+  App\Infrastructure\Persistence\Doctrine\DoctrineFleetRepository:
+    arguments:
+      - '@doctrine'

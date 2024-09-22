@@ -11,4 +11,5 @@ interface FleetRepositoryInterface
 {
     public function findById(FleetId $fleetId): Fleet|null;
     public function save(Fleet $fleet): FleetId;
+    public function delete(Fleet $fleet): void;
 }

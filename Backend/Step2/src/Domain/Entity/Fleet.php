@@ -21,7 +21,7 @@ class Fleet
     /**
      * @var Collection<int, Vehicle> $vehicles
      */
-    #[OneToMany(targetEntity: Vehicle::class, mappedBy: 'fleet', cascade: ['persist'])]
+    #[OneToMany(targetEntity: Vehicle::class, mappedBy: 'fleet', cascade: ['persist', 'remove'])]
     private Collection $vehicles;
 
     #[ORM\Column(type: 'user_id')]
