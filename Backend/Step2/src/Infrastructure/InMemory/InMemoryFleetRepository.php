@@ -26,4 +26,9 @@ final class InMemoryFleetRepository implements FleetRepositoryInterface
 
         return $fleet->getId();
     }
+
+    public function delete(Fleet $fleet): void
+    {
+        $this->fleets = [];
+    }
 }

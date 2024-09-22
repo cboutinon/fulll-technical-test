@@ -6,6 +6,8 @@ namespace App\Tests\Behat\features\bootstrap;
 
 use App\Domain\Repository\FleetRepositoryInterface;
 use App\Domain\ValueObject\UserId;
+use App\Infrastructure\InMemory\InMemoryFleetRepository;
+use App\Infrastructure\Persistence\Doctrine\DoctrineFleetRepository;
 use Behat\Behat\Context\Context;
 use App\Application\Command\CreateFleetByUserCommand;
 use App\Application\Command\Handler\CreateFleetByUserCommandHandler;
@@ -21,6 +23,8 @@ use App\Domain\Exception\VehicleAlreadyExistsException;
 use App\Domain\Exception\VehicleIsAlreadyParkedAtLocation;
 use App\Domain\ValueObject\FleetId;
 use App\Domain\ValueObject\Location;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use RuntimeException;
 
 final class FleetContext implements Context
@@ -33,9 +37,35 @@ final class FleetContext implements Context
     private VehicleIsAlreadyParkedAtLocation|null $vehicleIsAlreadyParkedAtLocation = null;
     private Location $location;
 
+    private FleetRepositoryInterface $fleetRepository;
+
     public function __construct(
-        private readonly FleetRepositoryInterface $fleetRepository,
+        private readonly InMemoryFleetRepository $inMemoryFleetRepository,
+        private readonly DoctrineFleetRepository $doctrineFleetRepository
     ) {
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    public function initFleetRepository(BeforeScenarioScope $scope): void
+    {
+        $tags = $scope->getScenario()->getTags();
+
+        if (in_array('critical', $tags)) {
+            $this->fleetRepository = $this->doctrineFleetRepository;
+        } else {
+            $this->fleetRepository = $this->inMemoryFleetRepository;
+        }
+    }
+
+    /**
+     * @AfterScenario @critical
+     */
+    public function cleanDB(AfterScenarioScope $scope)
+    {
+        $fleet = $this->fleetRepository->findById($this->fleetId);
+        $this->fleetRepository->delete($fleet);
     }
 
     /**

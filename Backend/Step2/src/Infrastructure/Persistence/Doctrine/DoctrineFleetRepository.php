@@ -35,4 +35,11 @@ final class DoctrineFleetRepository extends ServiceEntityRepository implements F
 
         return $fleet->getId();
     }
+
+    public function delete(Fleet $fleet): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($fleet);
+        $entityManager->flush();
+    }
 }

@@ -6,6 +6,17 @@ default:
       contexts:
         - App\Tests\Behat\features\bootstrap\FeatureContext
         - App\Tests\Behat\features\bootstrap\FleetContext:
-            fleetRepository: '@App\Infrastructure\InMemory\InMemoryFleetRepository'
+          fleetRepository: '@App\Infrastructure\InMemory\InMemoryFleetRepository'
+    critical:
+      paths:
+        - tests/Behat/features
+      filters:
+        tags: "@critical"
+      contexts:
+        - App\Tests\Behat\features\bootstrap\FleetContext:
+          fleetRepository: '@App\Infrastructure\Persistence\Doctrine\DoctrineFleetRepository'
   extensions:
-    FriendsOfBehat\SymfonyExtension: ~
+    FriendsOfBehat\SymfonyExtension:
+      bootstrap: 'public/index.php'
+      kernel:
+        environment: 'test'
